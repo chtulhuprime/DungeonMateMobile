@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://E:/diploma/diploma.iml" filepath="E:/diploma/diploma.iml" />
+      <module fileurl="file://E:/diploma/android/diploma_android.iml" filepath="E:/diploma/android/diploma_android.iml" />
+    </modules>
+  </component>
+</project>
