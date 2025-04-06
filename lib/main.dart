@@ -1,32 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'features/character_creation/bloc/character_creator_bloc.dart';
 import 'features/character_creation/screens/character_creator_screen.dart';
 
 void main() {
-  runApp(const DungeonMateApp());
+  runApp(const MyApp());
 }
 
-class DungeonMateApp extends StatelessWidget {
-  const DungeonMateApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'DungeonMate',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blueGrey,
-          brightness: Brightness.light,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => CharacterCreatorBloc(),
         ),
-      ),
-      darkTheme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blueGrey,
-          brightness: Brightness.dark,
+      ],
+      child: MaterialApp(
+        title: 'Dungeon Mate',
+        theme: ThemeData(
+          primarySwatch: Colors.blueGrey,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
+        home: const MainScreen(),
       ),
-      home: const MainScreen(),
     );
   }
 }

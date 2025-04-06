@@ -10,12 +10,15 @@ class StatsDistributionWidget extends StatefulWidget {
 }
 
 class _StatsDistributionWidgetState extends State<StatsDistributionWidget> {
-  final List<String> _availablePoints = List.generate(15, (index) => '●');
+  final List<String> _availablePoints = List.generate(27, (index) => '●');
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CharacterCreatorBloc, CharacterCreatorState>(
       builder: (context, state) {
+        int usedPoints = state.stats.values.fold(0, (sum, value) => sum + (value - 8));
+        int remainingPoints = 27 - usedPoints;
+
         return Column(
           children: [
             const Text(
@@ -25,7 +28,7 @@ class _StatsDistributionWidgetState extends State<StatsDistributionWidget> {
             const SizedBox(height: 20),
             _buildStatsGrid(state),
             const SizedBox(height: 30),
-            _buildPointsPool(state),
+            _buildPointsPool(remainingPoints),
             const SizedBox(height: 20),
             _buildManualInput(),
           ],
@@ -62,7 +65,7 @@ class _StatsDistributionWidgetState extends State<StatsDistributionWidget> {
                   children: [
                     Text('$value'),
                     const SizedBox(width: 10),
-                    _buildStatControls(statName, value, state),
+                    _buildStatControls(statName, value),
                   ],
                 ),
               ],
@@ -76,7 +79,7 @@ class _StatsDistributionWidgetState extends State<StatsDistributionWidget> {
     );
   }
 
-  Widget _buildStatControls(String statName, int value, CharacterCreatorState state) {
+  Widget _buildStatControls(String statName, int value) {
     return Row(
       children: [
         IconButton(
@@ -91,10 +94,7 @@ class _StatsDistributionWidgetState extends State<StatsDistributionWidget> {
     );
   }
 
-  Widget _buildPointsPool(CharacterCreatorState state) {
-    int usedPoints = state.stats.values.fold(0, (sum, value) => sum + (value - 8));
-    int remainingPoints = 27 - usedPoints;
-
+  Widget _buildPointsPool(int remainingPoints) {
     return Column(
       children: [
       Text(
@@ -108,7 +108,7 @@ class _StatsDistributionWidgetState extends State<StatsDistributionWidget> {
     Wrap(
     spacing: 8,
     runSpacing: 8,
-    children: List.generate(remainingPoints.clamp(0, 15), (index) {
+    children: List.generate(remainingPoints.clamp(0, 27), (index) {
     return Draggable<int>(
     data: 1,
     feedback: const Icon(Icons.circle, color: Colors.blue, size: 24),
@@ -162,9 +162,10 @@ class _StatsDistributionWidgetState extends State<StatsDistributionWidget> {
   }
 
   void _updateStat(String stat, int newValue) {
-    context.read<CharacterCreatorBloc>().add(DistributeStatsEvent({
-      ...context.read<CharacterCreatorBloc>().state.stats,
-      stat: newValue.clamp(8, 15),
-    }));
+    final currentStats = context.read<CharacterCreatorBloc>().state.stats;
+    final updatedStats = Map<String, int>.from(currentStats)..[stat] = newValue.clamp(8, 15);
+
+    // Явно используем DistributeStatsEvent
+    context.read<CharacterCreatorBloc>().add(DistributeStatsEvent(updatedStats));
   }
 }

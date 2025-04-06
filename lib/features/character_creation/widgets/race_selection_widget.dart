@@ -20,7 +20,10 @@ class RaceSelectionWidget extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Выберите расу:', style: TextStyle(fontSize: 18)),
+            const Text(
+              'Выберите расу:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 10),
             Wrap(
               spacing: 12,
@@ -30,7 +33,12 @@ class RaceSelectionWidget extends StatelessWidget {
                   label: Text(race),
                   selected: state.selectedRace == race,
                   onSelected: (selected) {
-                    context.read<CharacterCreatorBloc>().add(SelectRaceEvent(race));
+                    if (selected) {
+                      context.read<CharacterCreatorBloc>().add(SelectRaceEvent(race));
+                    } else {
+                      // Для сброса выбора используем пустую строку или специальное значение
+                      context.read<CharacterCreatorBloc>().add(SelectRaceEvent(''));
+                    }
                   },
                 );
               }).toList(),

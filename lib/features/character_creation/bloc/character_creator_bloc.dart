@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-
 part 'character_creator_event.dart';
 part 'character_creator_state.dart';
 
@@ -8,20 +7,20 @@ class CharacterCreatorBloc extends Bloc<CharacterCreatorEvent, CharacterCreatorS
   CharacterCreatorBloc() : super(CharacterCreatorState()) {
     on<SelectRaceEvent>(_onSelectRace);
     on<SelectClassEvent>(_onSelectClass);
-    on<ResetSelectionEvent>(_onResetSelection);
+    on<DistributeStatsEvent>(_onDistributeStats);
   }
 
   void _onSelectRace(SelectRaceEvent event, Emitter<CharacterCreatorState> emit) {
     emit(state.copyWith(
       selectedRace: event.race,
-      isComplete: event.race != null && state.selectedClass != null,
+      isComplete: event.race.isNotEmpty && state.selectedClass?.isNotEmpty == true,
     ));
   }
 
   void _onSelectClass(SelectClassEvent event, Emitter<CharacterCreatorState> emit) {
     emit(state.copyWith(
       selectedClass: event.characterClass,
-      isComplete: event.characterClass != null && state.selectedRace != null,
+      isComplete: event.characterClass.isNotEmpty && state.selectedRace?.isNotEmpty == true,
     ));
   }
 
@@ -30,11 +29,15 @@ class CharacterCreatorBloc extends Bloc<CharacterCreatorEvent, CharacterCreatorS
   }
 
   void _onDistributeStats(DistributeStatsEvent event, Emitter<CharacterCreatorState> emit) {
-    emit(state.copyWith(stats: event.stats));
+    emit(state.copyWith(
+      stats: event.stats,
+    ));
   }
 
   void _onResetStats(ResetStatsEvent event, Emitter<CharacterCreatorState> emit) {
-    emit(state.copyWith(stats: Map.from(state.baseStats)));
+    emit(state.copyWith(
+      stats: Map.from(state.baseStats),
+    ));
   }
 
   // Добавляем обработчики

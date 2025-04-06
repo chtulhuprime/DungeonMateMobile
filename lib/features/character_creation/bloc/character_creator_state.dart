@@ -5,6 +5,7 @@ class CharacterCreatorState {
   final String? selectedClass;
   final bool isComplete;
   final Map<String, int> stats;
+  final bool isStatsValid;
   final Map<String, int> baseStats;
   final Set<String> selectedSkills;
   final int availableSkillPoints;
@@ -29,6 +30,7 @@ class CharacterCreatorState {
       'Мудрость': 8,
       'Харизма': 8,
     },
+    this.isStatsValid = true,
     this.selectedSkills = const {},
     this.availableSkillPoints = 4,
   });
@@ -41,6 +43,7 @@ class CharacterCreatorState {
     Map<String, int>? baseStats,
     Set<String>? selectedSkills,
     int? availableSkillPoints,
+    bool? isStatsValid,
   }) {
     return CharacterCreatorState(
       selectedRace: selectedRace ?? this.selectedRace,
@@ -50,6 +53,7 @@ class CharacterCreatorState {
       baseStats: baseStats ?? this.baseStats,
       selectedSkills: selectedSkills ?? this.selectedSkills,
       availableSkillPoints: availableSkillPoints ?? this.availableSkillPoints,
+      isStatsValid: isStatsValid ?? this.isStatsValid,
     );
   }
 }
